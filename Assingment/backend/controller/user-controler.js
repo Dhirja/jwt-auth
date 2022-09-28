@@ -1,7 +1,7 @@
 const User = require('../model/userschema');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const JWT_SECRET_KEY = 'Dhiraj'
+const JWT_SECRET_KEY = 'secret'
 
 const signup = async(req,res,next) => {
     const {name, email, password} = req.body;
@@ -26,6 +26,7 @@ const signup = async(req,res,next) => {
         console.log(err)
     }
     return res.status(201).json({massage:user});
+   
 };
 
 const login = async(req,res,next) => {
@@ -43,7 +44,7 @@ const login = async(req,res,next) => {
     if(!checkPass){
        return res.status(400).json({massage:'invalid credential'})
     }
-    const token = jwt.sign({id: existUser._id},JWT_SECRET_KEY,{expiresIn:"60s"});
+    const token = jwt.sign({id: existUser._id},JWT_SECRET_KEY,{expiresIn:"30s"});
     res.cookie(String(existUser._id), token, {
          path:"/",
          expiresIn:new Date(Date.now() + 1000*30), //30sec
@@ -51,6 +52,7 @@ const login = async(req,res,next) => {
          sameSite: 'lax'
     })
     return res.status(200).json({massage:'login succesfully',user:existUser,token})
+    
 }
 
 const getToken = (req,res,next) => {
@@ -70,8 +72,9 @@ const getToken = (req,res,next) => {
         }
         console.log(user.id);
         req.id = user.id
+        
     })
-    next();
+    // next();
 }
     const getUser = async(req,res,next) => {
          const userId = req.id;
@@ -85,32 +88,33 @@ const getToken = (req,res,next) => {
             res.status(404).json({massage: "user not found"})
          }
          return res.status(200).json({user})
+        
     }
-//     const refreshToken = (req, res ,next) =>{
-//         const cookies = req.headers.cookie;
-//         const prevToken = cookies.split('=')[1];
-//         if(!prevToken) {
-//           return  res.status(400).json({massage: "token not find"})
-//         }
-//         jwt.verify(String(token),JWT_SECRET_KEY, (err, user)=>{
-//             if(err) {
-//                return res.status(403).json({massage: 'authentication failed'})
-//             }
-//             res.clearCookie(`${user.id}`);
-//             req.cookies[`${user.id}`] = "";
-//             const token = jwt.sign({id: existUser._id},JWT_SECRET_KEY,{expiresIn:"30s"});
+    const refreshToken = (req, res ,next) =>{
+        const cookies = req.headers.cookie;
+        const prevToken = cookies.split('=')[1];
+        if(!prevToken) {
+          return  res.status(400).json({massage: "token not find"})
+        }
+        jwt.verify(String(token),JWT_SECRET_KEY, (err, user)=>{
+            if(err) {
+               return res.status(403).json({massage: 'authentication failed'})
+            }
+            res.clearCookie(`${user.id}`);
+            req.cookies[`${user.id}`] = "";
+            const token = jwt.sign({id: existUser._id},JWT_SECRET_KEY,{expiresIn:"30s"});
 
-//         res.cookie(String(user.id), token, {
-//             path:"/",
-//             expiresIn:new Date(Date.now() + 1000*30), //30sec
-//             httpOnly:true,
-//             sameSite: 'lax'
-//        });
+        res.cookie(String(user.id), token, {
+            path:"/",
+            expiresIn:new Date(Date.now() + 1000*30), //30sec
+            httpOnly:true,
+            sameSite: 'lax'
+       });
 
-//        req.id = user.id;
-//        next();
-//     })
-// }
+       req.id = user.id;
+       next();
+    })
+}
 
 
 
@@ -118,4 +122,4 @@ exports.signup = signup;
 exports.login = login;
 exports.getToken = getToken;
 exports.getUser = getUser;
-// exports.refreshToken = refreshToken;
+ exports.refreshToken = refreshToken;

@@ -8,9 +8,12 @@ const Header = () => {
     <div>
         <AppBar position='sticky'>
             <Toolbar>
-                <Typography>MernAuth</Typography>
+                <Typography>Learn-Easy</Typography>
                 <Box sx={{marginLeft:'auto'}}  >
                     <Tabs onChange={(e,val)=>setValue(val)} value={value} textColor='inherit'>
+                        <Tab to="/student" LinkComponent={Link} label='student' />
+                        <Tab to="/teacher" LinkComponent={Link} label='teacher' />
+                        <Tab to="/admin" LinkComponent={Link} label='admin' />
                         <Tab to="/login" LinkComponent={Link} label='login' />
                         <Tab to="/signup" LinkComponent={Link} label='Signup' />
                     </Tabs>
