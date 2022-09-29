@@ -1,6 +1,7 @@
 
 const mongoose = require('mongoose')
 const userSchema = new mongoose.Schema({
+
     name: {
         type: String,
         required: true,
@@ -19,6 +20,12 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 5,
        
+    },
+    role: {
+        type: String,
+        // required: true,
+        enum:["teacher","admin"]
+        
     }
    
 });

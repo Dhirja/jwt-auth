@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 axios.defaults.withCredentials = true;
-// let firstRender = true;
+ 
 
 const Welcome = () => {
-  const [user , setUser] = useState();
+  const [users , setUser] = useState();
 
   // const refreshToken =async() => {
   //   const res = await axios.get("http://localhost:8000/api/refresh", {
@@ -22,17 +22,16 @@ const Welcome = () => {
     return data;
   };
   useEffect(()=> {
-    // if(firstRender) {
-    //   firstRender=false
-      sendRequest().then((data)=> setUser(data.user))
+    
+      //sendRequest().then((data)=> setUser(data.user))
     
    
-      // refreshToken().then((data) => setUser(data.user))
+      //  refreshToken().then((data) => setUser(data.user))
   },[]);
 
   return (
     <div>
-      {user && <h1>{user.name}</h1>}
+      {users && <h1>{users.name}</h1>}
     </div>
   );
 }

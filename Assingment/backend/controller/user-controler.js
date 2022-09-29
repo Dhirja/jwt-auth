@@ -2,7 +2,37 @@ const User = require('../model/userschema');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET_KEY = 'secret'
-
+module.exports.ClientSignup = (req,res)=>{
+    const {role,name,password,email} = req.body;
+    const user = new User({
+        name, 
+        email,
+        password,
+        role
+    });
+    if(role === "admin"){
+    User.find({role:"admin"}).exec((err,succ)=>{
+        if(err){
+            res.status(401).send({message:"invalid creditials"})
+        }else{
+            if(succ.length ===0){
+               user.save((err,succ)=>{
+                if(succ){
+                    res.status(201).send(succ)
+                }else{
+                    res.status(401).send({message:"error due to validation"})
+                }
+               })
+            }else{
+                res.status(201).send({message:"admin already present"})
+            }
+           
+        }
+    })
+}else if(role === "teacher"){
+    user.save()
+}
+}
 const signup = async(req,res,next) => {
     const {name, email, password} = req.body;
     let existingUser;
@@ -44,7 +74,7 @@ const login = async(req,res,next) => {
     if(!checkPass){
        return res.status(400).json({massage:'invalid credential'})
     }
-    const token = jwt.sign({id: existUser._id},JWT_SECRET_KEY,{expiresIn:"30s"});
+    const token = jwt.sign({id: existUser._id},JWT_SECRET_KEY,{expiresIn:"35s"});
     res.cookie(String(existUser._id), token, {
          path:"/",
          expiresIn:new Date(Date.now() + 1000*30), //30sec
@@ -90,31 +120,31 @@ const getToken = (req,res,next) => {
          return res.status(200).json({user})
         
     }
-    const refreshToken = (req, res ,next) =>{
-        const cookies = req.headers.cookie;
-        const prevToken = cookies.split('=')[1];
-        if(!prevToken) {
-          return  res.status(400).json({massage: "token not find"})
-        }
-        jwt.verify(String(token),JWT_SECRET_KEY, (err, user)=>{
-            if(err) {
-               return res.status(403).json({massage: 'authentication failed'})
-            }
-            res.clearCookie(`${user.id}`);
-            req.cookies[`${user.id}`] = "";
-            const token = jwt.sign({id: existUser._id},JWT_SECRET_KEY,{expiresIn:"30s"});
+    // const refreshToken = (req, res ,next) =>{
+    //     const cookies = req.headers.cookie;
+    //     const prevToken = cookies.split('=')[1];
+    //     if(!prevToken) {
+    //       return  res.status(400).json({massage: "token not find"})
+    //     }
+    //     jwt.verify(String(token),JWT_SECRET_KEY, (err, user)=>{
+    //         if(err) {
+    //            return res.status(403).json({massage: 'authentication failed'})
+    //         }
+    //         res.clearCookie(`${user.id}`);
+    //         req.cookies[`${user.id}`] = "";
+    //         const token = jwt.sign({id: existUser._id},JWT_SECRET_KEY,{expiresIn:"30s"});
 
-        res.cookie(String(user.id), token, {
-            path:"/",
-            expiresIn:new Date(Date.now() + 1000*30), //30sec
-            httpOnly:true,
-            sameSite: 'lax'
-       });
+    //     res.cookie(String(user.id), token, {
+    //         path:"/",
+    //         expiresIn:new Date(Date.now() + 1000*30), //30sec
+    //         httpOnly:true,
+    //         sameSite: 'lax'
+    //    });
 
-       req.id = user.id;
-       next();
-    })
-}
+    //    req.id = user.id;
+    //    next();
+    // })
+//}
 
 
 
@@ -122,4 +152,4 @@ exports.signup = signup;
 exports.login = login;
 exports.getToken = getToken;
 exports.getUser = getUser;
- exports.refreshToken = refreshToken;
+//  exports.refreshToken = refreshToken;
