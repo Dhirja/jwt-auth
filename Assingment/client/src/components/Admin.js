@@ -23,6 +23,7 @@ const Submitbtn = styled(Button)`
     color: #fff;
     height: 48px;
     border-radius: 2px;
+    width:30%;
 `;
 
 
@@ -86,7 +87,11 @@ const submitCourse = () => {
                   <TextField variant="standard" onChange={(e) => onInputChange(e)} name='username' label='Enter Teacher Name' required/>
                    <TextField variant="standard" onChange={(e) => onInputChange(e)} name='email' label='Enter Email' required/>
                   <TextField variant="standard" onChange={(e) => onInputChange(e)} name='phone' label='Enter Phone' required/>
-                   <Submitbtn onClick={() => submitTeacher()} >Continue</Submitbtn>
+                   <Box  style={{display:"flex", gap:"5px"}}>
+                      <Submitbtn onClick={() => submitTeacher()} >ADD</Submitbtn>
+                      <Submitbtn >Delete</Submitbtn>
+                      <Submitbtn >Update</Submitbtn>
+                   </Box>
      </Wrapper>
      <hr />
      <Wrapper>
@@ -94,8 +99,11 @@ const submitCourse = () => {
                   <TextField variant="standard" onChange={(e) => onCoursechange(e)} name='subject' label='Enter Subject' />
                   <TextField variant="standard" onChange={(e) => onCoursechange(e)} name='duration' label='Enter course duration' />
                   <TextField variant="standard" onChange={(e) => onCoursechange(e)} name='fee' label='Enter Course Fee' />
-                 
-                   <Submitbtn onClick={() => submitCourse()} >Continue</Submitbtn>
+                  <Box  style={{display:"flex", gap:"5px"}}>
+                    <Submitbtn onClick={() => submitCourse()} >Continue</Submitbtn>
+                    <Submitbtn >Deiete</Submitbtn>
+                    <Submitbtn >Update</Submitbtn>
+                  </Box>
      </Wrapper>
      
     </div>
