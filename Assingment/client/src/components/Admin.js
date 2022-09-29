@@ -18,8 +18,8 @@ const Wrapper = styled(Box)`
     }
 `;
 const Submitbtn = styled(Button)`
-    text-transform: green;
-    background: #FB641B;
+    // text-transform: green;
+    background: green;
     color: #fff;
     height: 48px;
     border-radius: 2px;
@@ -81,11 +81,11 @@ const submitCourse = () => {
     <div>
        <Wrapper>
                       <Typography>ADD TEACHER</Typography>
-                  <TextField variant="standard" onChange={(e) => onInputChange(e)} name='firstname' label='Enter Firstname' />
-                  <TextField variant="standard" onChange={(e) => onInputChange(e)} name='lastname' label='Enter Lastname' />
-                  <TextField variant="standard" onChange={(e) => onInputChange(e)} name='username' label='Enter Teacher Name' />
-                   <TextField variant="standard" onChange={(e) => onInputChange(e)} name='email' label='Enter Email' />
-                  <TextField variant="standard" onChange={(e) => onInputChange(e)} name='phone' label='Enter Phone' />
+                  <TextField variant="standard" onChange={(e) => onInputChange(e)} name='firstname' label='Enter Firstname' required/>
+                  <TextField variant="standard" onChange={(e) => onInputChange(e)} name='lastname' label='Enter Lastname' required/>
+                  <TextField variant="standard" onChange={(e) => onInputChange(e)} name='username' label='Enter Teacher Name' required/>
+                   <TextField variant="standard" onChange={(e) => onInputChange(e)} name='email' label='Enter Email' required/>
+                  <TextField variant="standard" onChange={(e) => onInputChange(e)} name='phone' label='Enter Phone' required/>
                    <Submitbtn onClick={() => submitTeacher()} >Continue</Submitbtn>
      </Wrapper>
      <hr />
